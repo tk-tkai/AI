@@ -133,8 +133,9 @@ class SchedulerService:
     def _run_performance_update(
         self,
     ) -> None:
+        initial_capital = 60.0
         self.performance_worker.run(
-            balance=10000.0,
-            equity=10000.0,
+            balance=initial_capital,
+            equity=initial_capital,
         )
         

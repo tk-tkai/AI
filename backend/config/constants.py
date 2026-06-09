@@ -1,0 +1,37 @@
+SUPPORTED_CRYPTO_SYMBOLS: list[str] = [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+]
+
+SUPPORTED_FOREX_SYMBOLS: list[str] = [
+    "EURUSD=X",
+    "GBPUSD=X",
+]
+
+SUPPORTED_COMMODITY_SYMBOLS: list[str] = [
+    "GC=F",
+]
+
+SUPPORTED_SYMBOLS: list[str] = (
+    SUPPORTED_CRYPTO_SYMBOLS
+    + SUPPORTED_FOREX_SYMBOLS
+    + SUPPORTED_COMMODITY_SYMBOLS
+)
+
+SUPPORTED_INTERVALS: list[str] = [
+    "15m",
+    "1h",
+    "4h",
+    "1d",
+]
+
+BUY_SIGNAL: str = "BUY"
+SELL_SIGNAL: str = "SELL"
+HOLD_SIGNAL: str = "HOLD"
+
+OPEN_STATUS: str = "OPEN"
+CLOSED_STATUS: str = "CLOSED"
+
+DEFAULT_RISK_PERCENT: float = 1.0
+DEFAULT_RISK_REWARD_RATIO: float = 2.0

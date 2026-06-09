@@ -17,7 +17,9 @@ class YFinanceProvider(BaseProvider):
     }
 
     def __init__(self) -> None:
-        self.logger = logging.getLogger(self.__class__.__name__)
+        self.logger = logging.getLogger(
+            self.__class__.__name__
+        )
 
     def get_ohlcv(
         self,
@@ -46,6 +48,15 @@ class YFinanceProvider(BaseProvider):
 
         dataframe = dataframe.tail(limit)
 
+        # Fix MultiIndex columns from yfinance
+        if isinstance(
+            dataframe.columns,
+            pd.MultiIndex,
+        ):
+            dataframe.columns = (
+                dataframe.columns.get_level_values(0)
+            )
+
         dataframe = dataframe.rename(
             columns={
                 "Open": "open",
@@ -54,6 +65,36 @@ class YFinanceProvider(BaseProvider):
                 "Close": "close",
                 "Volume": "volume",
             }
+        )
+
+        required_columns = [
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume",
+        ]
+
+        missing_columns = [
+            col
+            for col in required_columns
+            if col not in dataframe.columns
+        ]
+
+        if missing_columns:
+            raise ValueError(
+                f"Missing columns for {symbol}: "
+                f"{missing_columns}"
+            )
+
+        dataframe = dataframe[
+            required_columns
+        ]
+
+        self.logger.info(
+            "Processed columns for %s: %s",
+            symbol,
+            dataframe.columns.tolist(),
         )
 
         return dataframe
@@ -74,4 +115,6 @@ class YFinanceProvider(BaseProvider):
                 f"No price data returned for {symbol}"
             )
 
-        return float(history["Close"].iloc[-1])
+        return float(
+            history["Close"].iloc[-1]
+        )
